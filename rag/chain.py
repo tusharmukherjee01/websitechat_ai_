@@ -1,23 +1,15 @@
+import os
 from pathlib import Path
 
 from dotenv import load_dotenv
-
-from langchain_google_genai import (
-    ChatGoogleGenerativeAI
-)
+from google import genai
 
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
-
-llm = ChatGoogleGenerativeAI(
-    model="gemini-2.5-flash"
-)
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 
-def generate_answer(
-    question: str,
-    context: str
-):
+def generate_answer(question: str, context: str):
     if not context.strip():
         return "Sorry, I couldn't find relevant information to answer your question."
 
@@ -31,7 +23,10 @@ Question:
 {question}"""
 
     try:
-        response = llm.invoke(prompt)
-        return response.content
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+        return response.text
     except Exception as e:
         return f"Error generating answer: {str(e)}"
