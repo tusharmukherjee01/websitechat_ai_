@@ -220,3 +220,4 @@ xxhash==3.7.0
 yarl==1.23.0
 zipp==4.1.0
 zstandard==0.25.0
+sentence-transformers==3.3.1
